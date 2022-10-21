@@ -25,6 +25,8 @@ SECRET_KEY = 'django-insecure--687j)=oqf!8+doc8u4r@@6@0(a(eovcokaliq$ink_vpg19if
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+AUTH_USER_MODEL = 'cadastro.Cliente'
+
 ALLOWED_HOSTS = []
 
 
@@ -37,6 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+
+    'rest_framework',
+    'cpf_field',
+
+    'cadastro',
 ]
 
 MIDDLEWARE = [
@@ -75,11 +83,14 @@ WSGI_APPLICATION = 'setup.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'lojashenner',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'host.docker.internal',
+        'PORT': '5435',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -103,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'America/Sao_paulo'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'UTC'
 

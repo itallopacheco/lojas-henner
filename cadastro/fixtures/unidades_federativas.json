@@ -1,0 +1,245 @@
+[
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 12,
+    "fields": {
+      "sigla": "AC",
+      "nome": "ACRE"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 27,
+    "fields": {
+      "sigla": "AL",
+      "nome": "ALAGOAS"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 13,
+    "fields": {
+      "sigla": "AM",
+      "nome": "AMAZONAS"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 16,
+    "fields": {
+      "sigla": "AP",
+      "nome": "AMAPA"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 29,
+    "fields": {
+      "sigla": "BA",
+      "nome": "BAHIA"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 23,
+    "fields": {
+      "sigla": "CE",
+      "nome": "CEARA"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 53,
+    "fields": {
+      "sigla": "DF",
+      "nome": "DISTRITO FEDERAL"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 32,
+    "fields": {
+      "sigla": "ES",
+      "nome": "ESPIRITO SANTO"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 52,
+    "fields": {
+      "sigla": "GO",
+      "nome": "GOIAS"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 21,
+    "fields": {
+      "sigla": "MA",
+      "nome": "MARANHAO"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 31,
+    "fields": {
+      "sigla": "MG",
+      "nome": "MINAS GERAIS"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 50,
+    "fields": {
+      "sigla": "MS",
+      "nome": "MATO GROSSO DO SUL"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 51,
+    "fields": {
+      "sigla": "MT",
+      "nome": "MATO GROSSO"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 15,
+    "fields": {
+      "sigla": "PA",
+      "nome": "PARA"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 25,
+    "fields": {
+      "sigla": "PB",
+      "nome": "PARAIBA"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 26,
+    "fields": {
+      "sigla": "PE",
+      "nome": "PERNAMBUCO"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 22,
+    "fields": {
+      "sigla": "PI",
+      "nome": "PIAUI"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 41,
+    "fields": {
+      "sigla": "PR",
+      "nome": "PARANA"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 33,
+    "fields": {
+      "sigla": "RJ",
+      "nome": "RIO DE JANEIRO"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 11,
+    "fields": {
+      "sigla": "RO",
+      "nome": "RONDONIA"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 14,
+    "fields": {
+      "sigla": "RR",
+      "nome": "RORAIMA"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 43,
+    "fields": {
+      "sigla": "RS",
+      "nome": "RIO GRANDE DO SUL"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 42,
+    "fields": {
+      "sigla": "SC",
+      "nome": "SANTA CATARINA"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 28,
+    "fields": {
+      "sigla": "SE",
+      "nome": "SERGIPE"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 35,
+    "fields": {
+      "sigla": "SP",
+      "nome": "SAO PAULO"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 17,
+    "fields": {
+      "sigla": "TO",
+      "nome": "TOCANTINS"
+    }
+  },
+
+  {
+    "model": "cadastro.UnidadeFederativa",
+    "pk": 24,
+    "fields": {
+      "sigla": "RN",
+      "nome": "RIO GRANDE DO NORTE"
+    }
+  }
+]
