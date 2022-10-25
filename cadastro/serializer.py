@@ -1,10 +1,13 @@
 from rest_framework import serializers
+from django.contrib.auth.hashers import make_password
 from .models import Cliente, Endereco, UnidadeFederativa, Municipio, Cartao
 
 class ClientesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cliente
-        fields = ['id','primeiro_nome', 'ultimo_nome', 'data_nascimento', 'cpf', 'email', 'endereco', 'cartao','password']
+        fields = ['id','primeiro_nome', 'ultimo_nome', 'data_nascimento', 'cpf', 'email', 'endereco', 'cartao', 'telefone','password']
+    def validate_password(self, value: str) -> str:
+        return make_password(value)
 
 class EnderecosSerializer(serializers.ModelSerializer):
     class Meta:
