@@ -11,3 +11,4 @@ swagger-spec-validator==3.0.2
 drf-yasg==1.21.4
 django-rest-auth
 djangorestframework-simplejwt
+django-cors-headers
