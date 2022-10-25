@@ -27,7 +27,7 @@ class ClientesViewSet(viewsets.ModelViewSet):
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     default_error_messages = {
-        'no_active_account': '💀⚰️',
+        'no_active_account': 'Não foi possível encontrar uma conta com essas credenciais',
     
     }
 
