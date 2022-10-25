@@ -103,13 +103,13 @@ class Cliente(AbstractBaseUser):
 
     objects = ClienteManager()
 
-    USERNAME_FIELD = 'cpf'
-    REQUIRED_FIELDS = ['primeiro_nome', 'ultimo_nome', 'email', 'data_nascimento']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['primeiro_nome', 'ultimo_nome', 'cpf', 'data_nascimento']
 
     def __str__(self):
         return self.primeiro_nome + ' ' + self.ultimo_nome
 
-    def has_perm(self, perm, obj = None):
+    def has_perms(self, perm, obj = None):
         return self.is_admin
 
     def has_module_perms(self, app_label):
