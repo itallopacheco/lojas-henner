@@ -1,5 +1,5 @@
 from argparse import Action
-import email
+from django_filters.rest_framework import DjangoFilterBackend
 from multiprocessing.connection import Client
 from django.http import JsonResponse
 from cadastro.serializer import (ClientesSerializer
@@ -25,6 +25,7 @@ from rest_framework_simplejwt.serializers import(
 )
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework import filters
 
 
 # Create your views here.
@@ -59,18 +60,15 @@ class MyTokenObtainPairView(TokenObtainPairView):
     def get_queryset(self):
         queryset = Cliente.objects.filter(id = self.request.user.id)
         return queryset
-   
-class ProdutosViewSet(viewsets.ModelViewSet):
-    """ Exibindo todos os Produtos"""
-    queryset = ProdutoImagens.objects.all()
-    serializer_class = ProdutoImagensSerializer
-    permission_classes = [AllowAny]
-    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
 
-    def get_permissions(self):
-        if self.request.method in ['PATCH','DELETE', 'POST']:
-            return [IsAdminUser(), ]
-        return super().get_permissions()
+class ListProducts(generics.ListAPIView):
+    queryset = Produto.objects.all()
+    serializer_class = ProdutoSerializer
+    permission_classes = [AllowAny]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['categoria']
+    search_fields = ['nome', 'marca']
+
 
 class EnderecosViewSet(viewsets.ModelViewSet):
     """ Exibindo todos os Enderecos"""
