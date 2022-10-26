@@ -130,8 +130,16 @@ class Produto(models.Model):
     descricao = models.CharField(max_length=100)
     preco = models.FloatField()
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, default = '', verbose_name='Categoria')
-    imagem = models.ImageField(upload_to='imagens/', default = '', verbose_name='Imagem')
+    thumbnail = models.ImageField(upload_to='imagens/', default = '', verbose_name='Imagem')
     estoque = models.IntegerField()
+    marca = models.CharField(max_length=100)
 
     def __str__(self):
         return self.nome 
+
+class ProdutoImagens(models.Model):
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, default = '', verbose_name='Produto')
+    imagens = models.FileField(upload_to='imagens/')
+
+    def __str__(self):
+        return self.produto.nome

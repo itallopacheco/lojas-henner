@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cliente, Endereco, UnidadeFederativa, Municipio, Cartao, Produto, Categoria
+from .models import Cliente, Endereco, UnidadeFederativa, Municipio, Cartao, Produto, Categoria, ProdutoImagens
 
 
 
@@ -56,7 +56,16 @@ class Cartoes(admin.ModelAdmin):
 
 admin.site.register(Cartao, Cartoes)
 
+class ProdutosImagens(admin.StackedInline):
+     model = ProdutoImagens
+
+
 class Produtos(admin.ModelAdmin):
+    inlines = [ProdutosImagens,]
+
+    class Meta:
+        model = Produto
+    
     list_display = ('id','nome','estoque','preco')
     list_filter = ('nome','estoque','preco')
     search_fields = ('nome','estoque','preco')
@@ -66,6 +75,11 @@ class Produtos(admin.ModelAdmin):
     list_per_page = 25
 
 admin.site.register(Produto, Produtos)
+
+class ProdutosImagens(admin.ModelAdmin):
+    pass
+
+admin.site.register(ProdutoImagens, ProdutosImagens)
 
 class Categorias(admin.ModelAdmin):
     list_display = ('id','nome')

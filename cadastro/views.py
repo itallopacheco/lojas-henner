@@ -2,11 +2,17 @@ from argparse import Action
 import email
 from multiprocessing.connection import Client
 from django.http import JsonResponse
-from cadastro.serializer import ClientesSerializer, EnderecosSerializer, UnidadesFederativasSerializer, MunicipiosSerializer, ListaEnderecoClienteSerializer
+from cadastro.serializer import (ClientesSerializer
+, EnderecosSerializer
+, UnidadesFederativasSerializer
+, MunicipiosSerializer
+, ListaEnderecoClienteSerializer
+, ProdutoSerializer
+, ProdutoImagensSerializer)
 from rest_framework import viewsets, generics, response
-from cadastro.models import Cliente, Endereco, UnidadeFederativa, Municipio, Cartao
+from cadastro.models import Cliente, Endereco, ProdutoImagens, UnidadeFederativa, Municipio, Cartao, Produto
 from rest_framework.authentication import BasicAuthentication
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated , AllowAny
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated , AllowAny, IsAdminUser
 from .permissions import IsOwner, IsOwnerAddress
 from rest_framework.decorators import api_view
 from rest_framework_simplejwt.views import (
@@ -54,6 +60,17 @@ class MyTokenObtainPairView(TokenObtainPairView):
         queryset = Cliente.objects.filter(id = self.request.user.id)
         return queryset
    
+class ProdutosViewSet(viewsets.ModelViewSet):
+    """ Exibindo todos os Produtos"""
+    queryset = ProdutoImagens.objects.all()
+    serializer_class = ProdutoImagensSerializer
+    permission_classes = [AllowAny]
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
+
+    def get_permissions(self):
+        if self.request.method in ['PATCH','DELETE', 'POST']:
+            return [IsAdminUser(), ]
+        return super().get_permissions()
 
 class EnderecosViewSet(viewsets.ModelViewSet):
     """ Exibindo todos os Enderecos"""

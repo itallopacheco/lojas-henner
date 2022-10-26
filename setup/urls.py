@@ -1,6 +1,11 @@
 from django.contrib import admin
 from django.urls import path, include
-from cadastro.views import ClientesViewSet, EnderecosViewSet, ListaEnderecoClienteViewSet, MyTokenObtainPairView
+from cadastro.views import (ClientesViewSet
+, EnderecosViewSet
+, ListaEnderecoClienteViewSet
+, MyTokenObtainPairView
+, ProdutosViewSet
+)
 from rest_framework import routers, permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -9,7 +14,8 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
-
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 schema = get_schema_view(
@@ -26,6 +32,7 @@ schema = get_schema_view(
 router = routers.DefaultRouter()
 router.register(r'cliente', ClientesViewSet, basename = 'clientes')
 router.register(r'endereco', EnderecosViewSet, basename = 'enderecos')
+router.register(r'produto', ProdutosViewSet, basename = 'produtos')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,4 +42,4 @@ urlpatterns = [
     path('api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify', TokenVerifyView.as_view(), name='token_verify'),
     path('',include(router.urls) ),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
