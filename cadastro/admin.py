@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cliente, Endereco, UnidadeFederativa, Municipio, Cartao
+from .models import Cliente, Endereco, UnidadeFederativa, Municipio, Cartao, Produto, Categoria
 
 
 
@@ -55,3 +55,25 @@ class Cartoes(admin.ModelAdmin):
     list_per_page = 25
 
 admin.site.register(Cartao, Cartoes)
+
+class Produtos(admin.ModelAdmin):
+    list_display = ('id','nome','estoque','preco')
+    list_filter = ('nome','estoque','preco')
+    search_fields = ('nome','estoque','preco')
+    ordering = (['id'])
+    list_display_links = ('id','nome')
+    filter_horizontal = ()
+    list_per_page = 25
+
+admin.site.register(Produto, Produtos)
+
+class Categorias(admin.ModelAdmin):
+    list_display = ('id','nome')
+    list_filter = ('nome',)
+    search_fields = ('nome',)
+    ordering = (['id'])
+    list_display_links = ('id','nome')
+    filter_horizontal = ()
+    list_per_page = 25
+
+admin.site.register(Categoria, Categorias)

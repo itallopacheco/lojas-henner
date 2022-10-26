@@ -80,6 +80,7 @@ class Endereco(models.Model):
     cidade = models.ForeignKey(Municipio, on_delete=models.CASCADE, default = '', verbose_name='Cidade')
     estado = models.ForeignKey(UnidadeFederativa, on_delete=models.CASCADE, default = '', verbose_name='Estado')
     cep = models.CharField(max_length=100)
+    cliente = models.ForeignKey('Cliente', on_delete=models.CASCADE, default = '', verbose_name='Cliente')
 
     def __str__(self):
         return self.rua + ' ' + str(self.numero) + ' ' + self.bairro + ' ' + str(self.cidade) + ' ' + str(self.estado) + ' ' + self.cep
@@ -92,7 +93,6 @@ class Cliente(AbstractBaseUser):
     telefone = models.CharField(max_length=100)
     data_nascimento = models.DateField()
     cpf = CPFField(max_length=11, unique=True)
-    endereco = models.ForeignKey(Endereco, on_delete=models.CASCADE, default = '',null =True, blank=True , verbose_name='Endereço')
     cartao = models.ForeignKey(Cartao, on_delete=models.CASCADE, default = '',null =True ,blank=True ,verbose_name='Cartão')
 
     date_joined = models.DateTimeField(auto_now_add=True)
@@ -109,7 +109,7 @@ class Cliente(AbstractBaseUser):
     def __str__(self):
         return self.primeiro_nome + ' ' + self.ultimo_nome
 
-    def has_perms(self, perm, obj = None):
+    def has_perm(self, perm, obj = None):
         return self.is_admin
 
     def has_module_perms(self, app_label):
@@ -119,3 +119,19 @@ class Cliente(AbstractBaseUser):
     def idade(self):
         return today.year - self.data_nascimento.year - ((today.month, today.day) < (self.data_nascimento.month, self.data_nascimento.day))
 
+class Categoria(models.Model):
+    nome = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nome
+
+class Produto(models.Model):
+    nome = models.CharField(max_length=100)
+    descricao = models.CharField(max_length=100)
+    preco = models.FloatField()
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, default = '', verbose_name='Categoria')
+    imagem = models.ImageField(upload_to='imagens/', default = '', verbose_name='Imagem')
+    estoque = models.IntegerField()
+
+    def __str__(self):
+        return self.nome 
