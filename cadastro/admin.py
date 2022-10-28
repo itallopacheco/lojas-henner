@@ -1,5 +1,15 @@
 from django.contrib import admin
-from .models import Cliente, Endereco, UnidadeFederativa, Municipio, Cartao, Produto, Categoria, ProdutoImagens
+from .models import (Cliente
+, Endereco
+, UnidadeFederativa
+, Municipio
+, Cartao
+, Produto
+, Categoria
+, ProdutoImagens
+, Carrinho
+, ItemCarrinho
+, Pedido)
 
 
 
@@ -91,3 +101,36 @@ class Categorias(admin.ModelAdmin):
     list_per_page = 25
 
 admin.site.register(Categoria, Categorias)
+
+class Carrinhos(admin.ModelAdmin):
+    list_display = ('id','cliente','total')
+    list_filter = ('cliente',)
+    search_fields = ('cliente',)
+    ordering = (['id'])
+    list_display_links = ('id','cliente')
+    filter_horizontal = ()
+    list_per_page = 25
+
+admin.site.register(Carrinho, Carrinhos)
+
+class ItensCarrinho(admin.ModelAdmin):
+    list_display = ('id','carrinho','produto','quantidade','subtotal')
+    list_filter = ('carrinho','produto','quantidade','subtotal')
+    search_fields = ('carrinho','produto','quantidade','subtotal')
+    ordering = (['id'])
+    list_display_links = ('id','carrinho')
+    filter_horizontal = ()
+    list_per_page = 25
+
+admin.site.register(ItemCarrinho, ItensCarrinho)
+
+class Pedidos(admin.ModelAdmin):
+    list_display = ('id','cliente','endereco','total')
+    list_filter = ('cliente','endereco','total')
+    search_fields = ('cliente','endereco','total')
+    ordering = (['id'])
+    list_display_links = ('id','cliente')
+    filter_horizontal = ()
+    list_per_page = 25
+
+admin.site.register(Pedido, Pedidos)

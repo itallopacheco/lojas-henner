@@ -1,3 +1,5 @@
+from email.policy import default
+from enum import Enum
 from django.db import models
 from cpf_field.models import CPFField
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
@@ -41,7 +43,6 @@ class ClienteManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-
 class UnidadeFederativa(models.Model):
     codigo = models.CharField(max_length=2, primary_key=True)
     sigla = models.CharField(max_length=2, unique=True)
@@ -53,7 +54,6 @@ class UnidadeFederativa(models.Model):
     def __str__(self):
         return u'%s/%s' % (self.nome, self.sigla)
 
-
 class Municipio(models.Model):
     estado = models.ForeignKey(UnidadeFederativa, related_name="municipios", on_delete=models.CASCADE)
     codigo = models.CharField(max_length=6, unique=True)
@@ -61,8 +61,6 @@ class Municipio(models.Model):
 
     def __str__(self):
         return "%s/%s" % (self.nome, self.estado.sigla)
-
-
 
 class Cartao(models.Model):
     numero = models.CharField(max_length=100)
@@ -84,7 +82,6 @@ class Endereco(models.Model):
 
     def __str__(self):
         return self.rua + ' ' + str(self.numero) + ' ' + self.bairro + ' ' + str(self.cidade) + ' ' + str(self.estado) + ' ' + self.cep
-
 
 class Cliente(AbstractBaseUser):
     primeiro_nome = models.CharField(max_length=100)
@@ -143,3 +140,35 @@ class ProdutoImagens(models.Model):
 
     def __str__(self):
         return self.produto.nome
+
+class Carrinho(models.Model):
+    cliente = models.OneToOneField(Cliente, on_delete=models.CASCADE, default = '', verbose_name='Cliente')
+    total = models.FloatField(default=0)
+
+    def __str__(self):
+        return  'carrinho ' + ' de ' + self.cliente.primeiro_nome + ' ' + self.cliente.ultimo_nome
+  
+class ItemCarrinho(models.Model):
+    carrinho = models.ForeignKey(Carrinho, on_delete=models.CASCADE, default = '', verbose_name='Carrinho')
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, default = '', verbose_name='Produto')
+    quantidade = models.IntegerField()
+    subtotal = models.FloatField(default=0)
+    
+    def __str__(self):
+        return self.produto.nome + ' ' + str(self.quantidade)
+
+PEDIDO_STATUS =(
+    ('1', "Pendente"),
+    ('2', "Aprovado"),
+    ('3', "Cancelado"),
+    ('4', "Entregue"),
+)
+
+class Pedido(models.Model):
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, default = '', verbose_name='Cliente')
+    status = models.CharField(max_length=1, choices=PEDIDO_STATUS, default='1')
+    data = models.DateTimeField(auto_now_add=True)
+    total = models.FloatField(default=0)
+    endereco = models.ForeignKey(Endereco, on_delete=models.CASCADE, default = '', verbose_name='Endereço')
+    carrinho = models.ForeignKey(Carrinho, on_delete=models.CASCADE, default = '', verbose_name='Carrinho')
+    total = models.FloatField(default=0)

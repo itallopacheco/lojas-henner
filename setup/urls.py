@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from cadastro.views import (ClientesViewSet
-, EnderecosViewSet
+, EnderecosViewSet, ItemCarrinhoViewSet
 , ListaEnderecoClienteViewSet
 , MyTokenObtainPairView
 , ListProducts
@@ -32,6 +32,7 @@ schema = get_schema_view(
 router = routers.DefaultRouter()
 router.register(r'cliente', ClientesViewSet, basename = 'clientes')
 router.register(r'endereco', EnderecosViewSet, basename = 'enderecos')
+router.register(r'item-carrinho', ItemCarrinhoViewSet, basename = 'item_carrinho')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

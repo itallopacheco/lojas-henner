@@ -1,16 +1,18 @@
-from argparse import Action
 from django_filters.rest_framework import DjangoFilterBackend
 from multiprocessing.connection import Client
 from django.http import JsonResponse
+from rest_framework.decorators import action
 from cadastro.serializer import (ClientesSerializer
 , EnderecosSerializer
 , UnidadesFederativasSerializer
 , MunicipiosSerializer
 , ListaEnderecoClienteSerializer
 , ProdutoSerializer
-, ProdutoImagensSerializer)
+, ProdutoImagensSerializer
+, CarrinhoSerializer
+,ItemCarrinhoSerializer)
 from rest_framework import viewsets, generics, response
-from cadastro.models import Cliente, Endereco, ProdutoImagens, UnidadeFederativa, Municipio, Cartao, Produto
+from cadastro.models import Cliente, Endereco, ProdutoImagens, UnidadeFederativa, Municipio, Cartao, Produto, Carrinho, ItemCarrinho, Pedido
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated , AllowAny, IsAdminUser
 from .permissions import IsOwner, IsOwnerAddress
@@ -108,3 +110,40 @@ class ListaEnderecoClienteViewSet(generics.ListAPIView):
         queryset = Endereco.objects.filter(pk=id_endereco.pk)
         return queryset
     serializer_class = ListaEnderecoClienteSerializer
+
+class ItemCarrinhoViewSet(viewsets.ModelViewSet):
+    """ Exibindo todos os Itens do Carrinho"""
+    queryset = ItemCarrinho.objects.all()
+    serializer_class = ItemCarrinhoSerializer
+    permission_classes = [AllowAny]
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        obj = get_object_or_404(self.get_queryset(), pk=pk)
+
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    def get_queryset(self):
+        queryset = ItemCarrinho.objects.filter(carrinho__cliente=self.request.user)
+        return queryset
+
+   
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if(request.data.get('quantidade') > instance.quantidade):
+            instance.quantidade = request.data.get('quantidade')
+            instance.subtotal += (request.data.get('quantidade') * instance.produto.preco) - instance.subtotal
+            instance.save()
+        else:
+            instance.quantidade = request.data.get('quantidade')
+            instance.subtotal -= (request.data.get('quantidade') * instance.produto.preco) - instance.subtotal
+            instance.save()
+
+        serializer = self.get_serializer(instance, data = request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return response.Response(serializer.data)
+    
