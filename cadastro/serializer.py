@@ -91,29 +91,6 @@ class ItemCarrinhoSerializer(serializers.ModelSerializer):
         model = ItemCarrinho
         fields = ['id', 'carrinho', 'produto', 'quantidade', 'subtotal']
 
-    def create(self, validated_data):
-
-        soma = Produto.objects.get(id=validated_data['produto'].id).preco * validated_data['quantidade']      
-        carrinho = Carrinho.objects.get(cliente=validated_data['carrinho'].cliente)
-
-        if (validated_data['quantidade'] > Produto.objects.get(id=validated_data['produto'].id).estoque):
-            raise serializers.ValidationError("Quantidade maior do pedido excede quantidade do estoque")
-
-
-        item = ItemCarrinho(
-            carrinho = carrinho,
-            produto = validated_data['produto'],
-            quantidade = validated_data['quantidade'],
-            subtotal = soma
-        )
-        item.save()
-
-        carrinho.total += item.subtotal
-        carrinho.save()
-
-
-        return item
-
     def update(self, validated_data, instance):
         instance.quantidade = validated_data.get('quantidade', instance.quantidade)
         instance.save()

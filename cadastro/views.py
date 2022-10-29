@@ -8,6 +8,7 @@ from cadastro.models import *
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated , AllowAny, IsAdminUser
 from .permissions import IsOwner, IsOwnerAddress
+from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.decorators import api_view
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -41,7 +42,7 @@ class ClientesViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.request.method in ['PATCH','DELETE']:
             return [IsOwner(), ]
-        return super().get_permissions()
+        return super().get_permissions()               
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     default_error_messages = {
@@ -61,8 +62,6 @@ class CategoriaViewSet(viewsets.ModelViewSet):
     serializer_class = CategoriaSerializer
     permission_classes = [AllowAny]
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
-
-
 
 class ProdutosViewSet(viewsets.ModelViewSet):
     """ Exibindo todos os Produtos"""
@@ -132,6 +131,33 @@ class ItemCarrinhoViewSet(viewsets.ModelViewSet):
         queryset = ItemCarrinho.objects.filter(carrinho__cliente=self.request.user)
         return queryset
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        produto = Produto.objects.get(pk=request.data['produto'])
+        soma = request.data['quantidade'] * produto.preco
+        carrinho = request.user.carrinho
+        
+        if (request.data['quantidade'] > produto.estoque):
+            return response.Response(
+                {'Erro': 'Quantidade maior que o estoque'}
+                , status=status.HTTP_400_BAD_REQUEST
+                )
+    
+        serializer.save(carrinho = carrinho
+                        ,subtotal = soma
+                        )
+        
+        carrinho.total += soma
+        carrinho.save() 
+
+        headers = self.get_success_headers(serializer.data)
+        return response.Response(
+            serializer.data
+            , status=status.HTTP_201_CREATED
+            , headers=headers
+            )
+
     def destroy(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
@@ -145,6 +171,7 @@ class ItemCarrinhoViewSet(viewsets.ModelViewSet):
             pass
         return Response(status=status.HTTP_204_NO_CONTENT) 
    
+
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         if(request.data.get('quantidade') > instance.quantidade):
