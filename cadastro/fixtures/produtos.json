@@ -18,7 +18,7 @@
             "nome": "MacBook Pro",
             "descricao": "MacBook Pro 2021 com tela mini-LED pode ser lançado entre setembro e novembro.",
             "preco": 7199.99,
-            "categoria": 1,
+            "categoria": 3,
             "thumbnail": "imagens/1.png",
             "estoque": 12,
             "marca": "Apple"
@@ -31,7 +31,7 @@
             "nome": "Samsung Galaxy Book",
             "descricao": "Laptop Samsung Galaxy Book S (2020) com chip Intel Lakefield, 8 GB de RAM lançado.",
             "preco": 7500.0,
-            "categoria": 1,
+            "categoria": 3,
             "thumbnail": "imagens/thumbnail_1.jpg",
             "estoque": 70,
             "marca": "Samsung"

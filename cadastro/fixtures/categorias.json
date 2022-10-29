@@ -16,7 +16,7 @@
         "model": "cadastro.categoria",
         "pk": 3,
         "fields": {
-            "nome": "Computadores e Imformática"
+            "nome": "Computadores e Informática"
         }
     },
     {

@@ -73,7 +73,7 @@ class Cartao(models.Model):
 
 class Endereco(models.Model):
     rua = models.CharField(max_length=100)
-    numero = models.IntegerField()
+    numero = models.CharField(max_length=100)
     bairro = models.CharField(max_length=100)
     cidade = models.ForeignKey(Municipio, on_delete=models.CASCADE, default = '', verbose_name='Cidade')
     estado = models.ForeignKey(UnidadeFederativa, on_delete=models.CASCADE, default = '', verbose_name='Estado')
