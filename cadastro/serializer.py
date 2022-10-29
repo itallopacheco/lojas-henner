@@ -69,6 +69,10 @@ class ProdutoSerializer(serializers.ModelSerializer):
 
         categoria = CategoriaSerializer()
 
+class CategoriaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Categoria
+        fields = ['id','nome']
 
 class ProdutoImagensSerializer(serializers.ModelSerializer):
     class Meta:
@@ -116,12 +120,3 @@ class ItemCarrinhoSerializer(serializers.ModelSerializer):
         
         return instance
     
-    def delete(self, validated_data):
-        carrinho = Carrinho.objects.get(cliente=validated_data['carrinho'].cliente)
-        carrinho.total -= validated_data['subtotal']
-        carrinho.save()
-
-        item = ItemCarrinho.objects.get(id=validated_data['id'])
-        item.delete()
-
-        return item

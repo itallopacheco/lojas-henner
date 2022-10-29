@@ -2,17 +2,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 from multiprocessing.connection import Client
 from django.http import JsonResponse
 from rest_framework.decorators import action
-from cadastro.serializer import (ClientesSerializer
-, EnderecosSerializer
-, UnidadesFederativasSerializer
-, MunicipiosSerializer
-, ListaEnderecoClienteSerializer
-, ProdutoSerializer
-, ProdutoImagensSerializer
-, CarrinhoSerializer
-,ItemCarrinhoSerializer)
+from cadastro.serializer import *
 from rest_framework import viewsets, generics, response
-from cadastro.models import Cliente, Endereco, ProdutoImagens, UnidadeFederativa, Municipio, Cartao, Produto, Carrinho, ItemCarrinho, Pedido
+from cadastro.models import *
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated , AllowAny, IsAdminUser
 from .permissions import IsOwner, IsOwnerAddress
@@ -63,10 +55,21 @@ class MyTokenObtainPairView(TokenObtainPairView):
         queryset = Cliente.objects.filter(id = self.request.user.id)
         return queryset
 
-class ListProducts(generics.ListAPIView):
+class CategoriaViewSet(viewsets.ModelViewSet):
+    """ Exibindo todas as Categorias"""
+    queryset = Categoria.objects.all()
+    serializer_class = CategoriaSerializer
+    permission_classes = [AllowAny]
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
+
+
+
+class ProdutosViewSet(viewsets.ModelViewSet):
+    """ Exibindo todos os Produtos"""
     queryset = Produto.objects.all()
     serializer_class = ProdutoSerializer
     permission_classes = [AllowAny]
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['categoria']
     search_fields = ['nome', 'marca']
@@ -129,6 +132,18 @@ class ItemCarrinhoViewSet(viewsets.ModelViewSet):
         queryset = ItemCarrinho.objects.filter(carrinho__cliente=self.request.user)
         return queryset
 
+    def destroy(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+
+            carrinho = Carrinho.objects.get(pk=instance.carrinho.pk)
+            carrinho.total -= instance.subtotal
+            carrinho.save()
+
+            self.perform_destroy(instance)
+        except Http404:
+            pass
+        return Response(status=status.HTTP_204_NO_CONTENT) 
    
     def update(self, request, *args, **kwargs):
         instance = self.get_object()

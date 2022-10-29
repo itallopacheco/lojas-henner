@@ -4,7 +4,8 @@ from cadastro.views import (ClientesViewSet
 , EnderecosViewSet, ItemCarrinhoViewSet
 , ListaEnderecoClienteViewSet
 , MyTokenObtainPairView
-, ListProducts
+, ProdutosViewSet
+, CategoriaViewSet
 )
 from rest_framework import routers, permissions
 from drf_yasg.views import get_schema_view
@@ -33,10 +34,11 @@ router = routers.DefaultRouter()
 router.register(r'cliente', ClientesViewSet, basename = 'clientes')
 router.register(r'endereco', EnderecosViewSet, basename = 'enderecos')
 router.register(r'item-carrinho', ItemCarrinhoViewSet, basename = 'item_carrinho')
+router.register(r'produtos', ProdutosViewSet , basename = 'produtos')
+router.register(r'categoria', CategoriaViewSet , basename = 'categoria')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('produtos/', ListProducts.as_view(), name='list-produto'),
     path('swagger/', schema.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('api/token', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
