@@ -1,0 +1,36 @@
+[{
+        "model": "cadastro.categoria",
+        "pk": 1,
+        "fields": {
+            "nome": "Smartphones"
+        }
+    },
+    {
+        "model": "cadastro.categoria",
+        "pk": 2,
+        "fields": {
+            "nome": "Beleza"
+        }
+    },
+    {
+        "model": "cadastro.categoria",
+        "pk": 3,
+        "fields": {
+            "nome": "Computadores e Imformática"
+        }
+    },
+    {
+        "model": "cadastro.categoria",
+        "pk": 4,
+        "fields": {
+            "nome": "Alimentos e Bebidas"
+        }
+    },
+    {
+        "model": "cadastro.categoria",
+        "pk": 5,
+        "fields": {
+            "nome": "Decoração para Casa"
+        }
+    }
+]
