@@ -1,12 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
-from cadastro.views import (ClientesViewSet
-, EnderecosViewSet, ItemCarrinhoViewSet
-, ListaEnderecoClienteViewSet
-, MyTokenObtainPairView
-, ProdutosViewSet
-, CategoriaViewSet
-)
+from cadastro.views import *
+
 from rest_framework import routers, permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -36,6 +31,8 @@ router.register(r'endereco', EnderecosViewSet, basename = 'enderecos')
 router.register(r'item-carrinho', ItemCarrinhoViewSet, basename = 'item_carrinho')
 router.register(r'produtos', ProdutosViewSet , basename = 'produtos')
 router.register(r'categoria', CategoriaViewSet , basename = 'categoria')
+router.register(r'unidade-federativa', UnidadeFederativaViewSet , basename = 'unidade_federativa')
+router.register(r'municipio', MunicipioViewSet , basename = 'municipio')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -74,6 +74,20 @@ class ProdutosViewSet(viewsets.ModelViewSet):
     filterset_fields = ['categoria']
     search_fields = ['nome', 'marca']
 
+class UnidadeFederativaViewSet(viewsets.ModelViewSet):
+    """ Exibindo todas as Unidades Federativas"""
+    queryset = UnidadeFederativa.objects.all()
+    serializer_class = UnidadesFederativasSerializer
+    permission_classes = [AllowAny]
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
+
+class MunicipioViewSet(viewsets.ModelViewSet):
+    """ Exibindo todos os Municipios"""
+    queryset = Municipio.objects.all()
+    serializer_class = MunicipiosSerializer
+    permission_classes = [AllowAny]
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
+
 
 class EnderecosViewSet(viewsets.ModelViewSet):
     """ Exibindo todos os Enderecos"""
