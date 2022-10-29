@@ -15,6 +15,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenViewBase,
 )
+from django.http import *
 from rest_framework_simplejwt.serializers import(
     TokenObtainPairSerializer,
 )
@@ -169,7 +170,7 @@ class ItemCarrinhoViewSet(viewsets.ModelViewSet):
             self.perform_destroy(instance)
         except Http404:
             pass
-        return Response(status=status.HTTP_204_NO_CONTENT) 
+        return response.Response(status=status.HTTP_204_NO_CONTENT) 
    
 
     def update(self, request, *args, **kwargs):
