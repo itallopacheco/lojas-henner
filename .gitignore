@@ -4,7 +4,6 @@
 *.pyc
 __pycache__
 db.sqlite3
-media
 
 # Backup files # 
 *.bak 
@@ -49,7 +48,6 @@ atlassian-ide-plugin.xml
 *.py[cod] 
 *$py.class 
 
-imagens/
 venv/
 
 # Distribution / packaging 

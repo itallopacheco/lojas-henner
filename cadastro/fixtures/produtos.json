@@ -1,0 +1,92 @@
+[{
+        "model": "cadastro.produto",
+        "pk": 1,
+        "fields": {
+            "nome": "iPhone 9",
+            "descricao": "Um celular de maçã que não é nada como a maçã",
+            "preco": 2500.0,
+            "categoria": 1,
+            "thumbnail": "imagens/thumbnail.jpg",
+            "estoque": 15,
+            "marca": "Apple"
+        }
+    },
+    {
+        "model": "cadastro.produto",
+        "pk": 2,
+        "fields": {
+            "nome": "MacBook Pro",
+            "descricao": "MacBook Pro 2021 com tela mini-LED pode ser lançado entre setembro e novembro.",
+            "preco": 7199.99,
+            "categoria": 1,
+            "thumbnail": "imagens/1.png",
+            "estoque": 12,
+            "marca": "Apple"
+        }
+    },
+    {
+        "model": "cadastro.produto",
+        "pk": 3,
+        "fields": {
+            "nome": "Samsung Galaxy Book",
+            "descricao": "Laptop Samsung Galaxy Book S (2020) com chip Intel Lakefield, 8 GB de RAM lançado.",
+            "preco": 7500.0,
+            "categoria": 1,
+            "thumbnail": "imagens/thumbnail_1.jpg",
+            "estoque": 70,
+            "marca": "Samsung"
+        }
+    },
+    {
+        "model": "cadastro.produto",
+        "pk": 4,
+        "fields": {
+            "nome": "HP Pavilion 15-DK1056WM",
+            "descricao": "Laptop para jogos HP Pavilion 15-DK1056WM 10ª geração Core i5, 8 GB, SSD de 256 GB, GTX 1650 4 GB, W",
+            "preco": 5500.0,
+            "categoria": 3,
+            "thumbnail": "imagens/1.jpg",
+            "estoque": 35,
+            "marca": "HP Pavilion"
+        }
+    },
+    {
+        "model": "cadastro.produto",
+        "pk": 5,
+        "fields": {
+            "nome": "Perfume Oil",
+            "descricao": "Mega Desconto, Impressão de Acqua Di Gio by Giorgio Armani perfume attar concentrado Oil.",
+            "preco": 65.0,
+            "categoria": 2,
+            "thumbnail": "imagens/thumbnail_2.jpg",
+            "estoque": 120,
+            "marca": "Impression of Acqua Di Gio"
+        }
+    },
+    {
+        "model": "cadastro.produto",
+        "pk": 6,
+        "fields": {
+            "nome": "Elbow Macaroni - 400 g",
+            "descricao": "Detalhes do produto Bake Parlor Big Elbow Macaroni - 400 g.",
+            "preco": 75.0,
+            "categoria": 4,
+            "thumbnail": "imagens/1_1.jpg",
+            "estoque": 20,
+            "marca": "Bake Parlor Big"
+        }
+    },
+    {
+        "model": "cadastro.produto",
+        "pk": 7,
+        "fields": {
+            "nome": "Flying Wooden Bird",
+            "descricao": "O pacote inclui 6 pássaros com fita adesiva Forma: Pássaros de madeira em forma 3D Material: MDF de",
+            "preco": 250.0,
+            "categoria": 5,
+            "thumbnail": "imagens/1_2.jpg",
+            "estoque": 133,
+            "marca": "Flying Wooden"
+        }
+    }
+]

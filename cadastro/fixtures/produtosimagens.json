@@ -1,0 +1,57 @@
+[{
+        "model": "cadastro.produtoimagens",
+        "pk": 1,
+        "fields": {
+            "produto": 1,
+            "imagens": "imagens/thumbnail_AQDhbpw.jpg"
+        }
+    },
+    {
+        "model": "cadastro.produtoimagens",
+        "pk": 2,
+        "fields": {
+            "produto": 1,
+            "imagens": "imagens/thumbnail_nToCkXo.jpg"
+        }
+    },
+    {
+        "model": "cadastro.produtoimagens",
+        "pk": 3,
+        "fields": {
+            "produto": 2,
+            "imagens": "imagens/1_6kA84sy.png"
+        }
+    },
+    {
+        "model": "cadastro.produtoimagens",
+        "pk": 4,
+        "fields": {
+            "produto": 4,
+            "imagens": "imagens/1_6wouKj3.jpg"
+        }
+    },
+    {
+        "model": "cadastro.produtoimagens",
+        "pk": 5,
+        "fields": {
+            "produto": 5,
+            "imagens": "imagens/thumbnail_2_uMf71RS.jpg"
+        }
+    },
+    {
+        "model": "cadastro.produtoimagens",
+        "pk": 6,
+        "fields": {
+            "produto": 6,
+            "imagens": "imagens/1_1_2MOlEmw.jpg"
+        }
+    },
+    {
+        "model": "cadastro.produtoimagens",
+        "pk": 7,
+        "fields": {
+            "produto": 7,
+            "imagens": "imagens/1_2_dPodd5F.jpg"
+        }
+    }
+]
