@@ -1,3 +1,4 @@
+from genericpath import exists
 from django_filters.rest_framework import DjangoFilterBackend
 from multiprocessing.connection import Client
 from django.http import JsonResponse
@@ -158,6 +159,24 @@ class ItemCarrinhoViewSet(viewsets.ModelViewSet):
                 {'Erro': 'Quantidade maior que o estoque'}
                 , status=status.HTTP_400_BAD_REQUEST
                 )
+        
+        if (ItemCarrinho.objects.filter(carrinho=carrinho, produto=produto).exists()):
+            
+            if(ItemCarrinho.objects.get(carrinho=carrinho, produto=produto).quantidade + request.data['quantidade'] > produto.estoque):
+                return response.Response(
+                    {'Erro': 'Quantidade maior que o estoque'}
+                    , status=status.HTTP_400_BAD_REQUEST
+                    )
+
+            item = ItemCarrinho.objects.get(carrinho=carrinho, produto=produto)
+            item.quantidade += request.data['quantidade']
+            item.subtotal += soma
+            item.save()
+            return response.Response(
+                {'Sucesso': 'Item adicionado ao carrinho'}
+                , status=status.HTTP_200_OK
+                )
+
     
         serializer.save(carrinho = carrinho
                         ,subtotal = soma
@@ -200,15 +219,11 @@ class ItemCarrinhoViewSet(viewsets.ModelViewSet):
         carrinho = Carrinho.objects.get(pk=request.user.carrinho.pk)
 
 
-        if(request.data.get('quantidade') + itemCarrinho.quantidade > produto.estoque):
+        if(request.data.get('quantidade') > produto.estoque):
             return response.Response(
                 {'Erro': 'Quantidade maior que o estoque'}
                 , status=status.HTTP_400_BAD_REQUEST
                 )
-        
-
-        print("AAAAAAAAAAAA", request.data.get('quantidade'))
-        print("BBBBBBBBBBBB", itemCarrinho.quantidade)
 
         if (request.data.get('quantidade') > itemCarrinho.quantidade):
             soma = (request.data.get('quantidade')  * produto.preco) -  itemCarrinho.subtotal
