@@ -186,6 +186,13 @@ class ItemCarrinhoViewSet(viewsets.ModelViewSet):
             pass
         return response.Response(status=status.HTTP_204_NO_CONTENT) 
    
+    @action(detail=True, methods=['patch'])
+    def destroy_all(self, request, *args, **kwargs):
+        carrinho = Carrinho.objects.get(pk=request.user.carrinho.pk)
+        carrinho.total = 0
+        carrinho.save()
+        self.get_queryset().delete()
+        return response.Response(status=status.HTTP_204_NO_CONTENT)
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
