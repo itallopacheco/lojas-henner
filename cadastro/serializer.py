@@ -91,9 +91,3 @@ class ItemCarrinhoSerializer(serializers.ModelSerializer):
         model = ItemCarrinho
         fields = ['id', 'carrinho', 'produto', 'quantidade', 'subtotal']
 
-    def update(self, validated_data, instance):
-        instance.quantidade = validated_data.get('quantidade', instance.quantidade)
-        instance.save()
-        
-        return instance
-    

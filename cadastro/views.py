@@ -195,19 +195,42 @@ class ItemCarrinhoViewSet(viewsets.ModelViewSet):
         return response.Response(status=status.HTTP_204_NO_CONTENT)
 
     def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        if(request.data.get('quantidade') > instance.quantidade):
-            instance.quantidade = request.data.get('quantidade')
-            instance.subtotal += (request.data.get('quantidade') * instance.produto.preco) - instance.subtotal
-            instance.save()
+        itemCarrinho = ItemCarrinho.objects.get(pk=self.kwargs['pk'])
+        produto = Produto.objects.get(pk=itemCarrinho.produto.pk)
+        carrinho = Carrinho.objects.get(pk=request.user.carrinho.pk)
+
+
+        if(request.data.get('quantidade') + itemCarrinho.quantidade > produto.estoque):
+            return response.Response(
+                {'Erro': 'Quantidade maior que o estoque'}
+                , status=status.HTTP_400_BAD_REQUEST
+                )
+        
+
+        print("AAAAAAAAAAAA", request.data.get('quantidade'))
+        print("BBBBBBBBBBBB", itemCarrinho.quantidade)
+
+        if (request.data.get('quantidade') > itemCarrinho.quantidade):
+            soma = (request.data.get('quantidade')  * produto.preco) -  itemCarrinho.subtotal
+            itemCarrinho.quantidade = request.data.get('quantidade')
+            itemCarrinho.subtotal += soma
+            itemCarrinho.save()
+            carrinho.total += soma
+            carrinho.save()
         else:
-            instance.quantidade = request.data.get('quantidade')
-            instance.subtotal -= (request.data.get('quantidade') * instance.produto.preco) - instance.subtotal
-            instance.save()
+            subtracao =  itemCarrinho.subtotal - (request.data.get('quantidade')  * produto.preco) 
+            itemCarrinho.quantidade = request.data.get('quantidade')
+            print("AAAAAAAAA ANTES:", subtracao)
+            itemCarrinho.subtotal -= subtracao
+            itemCarrinho.save()
+            print("AAAAAAAAA DEPOIS:", subtracao)
+            carrinho.total -= subtracao
+            carrinho.save()
+        
+        ItemCarrinhoSerializer = self.get_serializer(itemCarrinho)
 
-        serializer = self.get_serializer(instance, data = request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        return response.Response(serializer.data)
+        return response.Response(
+            ItemCarrinhoSerializer.data 
+            , status=status.HTTP_200_OK
+            )
     
