@@ -64,6 +64,12 @@ class ClientesViewSet(viewsets.ModelViewSet):
         instance.is_active = False
         instance.save()
         return response.Response(status=status.HTTP_204_NO_CONTENT)   
+    
+    @action(detail=False, methods=['post'])
+    def getByToken(self, request, *args, **kwargs):
+        cliente = Cliente.objects.get(pk=request.user.pk)
+        serializer = ClientesSerializer(cliente)
+        return response.Response(serializer.data, status=status.HTTP_200_OK)
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     default_error_messages = {
