@@ -15,7 +15,7 @@ from .models import (Categoria
 class ClientesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cliente
-        fields = ['id','primeiro_nome', 'ultimo_nome', 'data_nascimento', 'cpf', 'email', 'cartao', 'telefone','password']
+        fields = ['id','primeiro_nome', 'ultimo_nome', 'data_nascimento', 'cpf', 'email','telefone','password']
     
     # def validate_password(self, value: str) -> str:
     #     return make_password(value)
@@ -41,6 +41,11 @@ class EnderecosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Endereco
         fields = ['id','rua','numero','bairro','cidade','estado','cep', 'cliente']
+
+class CartaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cartao
+        fields = ['id','numero','nome','validade','codigo','cliente']
 
 class UnidadesFederativasSerializer(serializers.ModelSerializer):
     class Meta:

@@ -67,6 +67,7 @@ class Cartao(models.Model):
     nome = models.CharField(max_length=100)
     validade = models.CharField(max_length=100)
     codigo = models.CharField(max_length=100)
+    cliente = models.ForeignKey('Cliente', related_name='cartoes', default='' ,on_delete=models.CASCADE)
 
     def __str__(self):
         return self.numero + ' ' + self.nome + ' ' + self.validade + ' ' + self.codigo
@@ -90,7 +91,6 @@ class Cliente(AbstractBaseUser):
     telefone = models.CharField(max_length=100)
     data_nascimento = models.DateField()
     cpf = CPFField(max_length=11, unique=True)
-    cartao = models.ForeignKey(Cartao, on_delete=models.CASCADE, default = '',null =True ,blank=True ,verbose_name='Cartão')
 
     date_joined = models.DateTimeField(auto_now_add=True)
     is_admin = models.BooleanField(default=False)

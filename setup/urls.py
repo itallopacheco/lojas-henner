@@ -33,6 +33,8 @@ router.register(r'produtos', ProdutosViewSet , basename = 'produtos')
 router.register(r'categoria', CategoriaViewSet , basename = 'categoria')
 router.register(r'unidade-federativa', UnidadeFederativaViewSet , basename = 'unidade_federativa')
 router.register(r'municipio', MunicipioViewSet , basename = 'municipio')
+router.register(r'cartao', CartaoViewSet , basename = 'cartao')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

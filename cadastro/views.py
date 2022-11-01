@@ -89,25 +89,13 @@ class MunicipioViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
 
-
 class EnderecosViewSet(viewsets.ModelViewSet):
     """ Exibindo todos os Enderecos"""
     permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Endereco.objects.all()
     serializer_class = EnderecosSerializer
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(cliente = request.user)
-        headers = self.get_success_headers(serializer.data)
-        return response.Response(
-            serializer.data
-            , status=status.HTTP_201_CREATED
-            , headers=headers
-            )
-
+   
     def get_object(self):
        pk = self.kwargs.get('pk')
        obj = get_object_or_404(self.get_queryset(), pk=pk)
@@ -120,6 +108,63 @@ class EnderecosViewSet(viewsets.ModelViewSet):
             return [IsOwnerAddress(), ]
         return super().get_permissions()
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(cliente = request.user)
+        headers = self.get_success_headers(serializer.data)
+        return response.Response(
+            serializer.data
+            , status=status.HTTP_201_CREATED
+            , headers=headers
+            )
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = Endereco.objects.filter(cliente = request.user).first()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return response.Response(serializer.data)
+
+    def list(self, request, *args, **kwargs):
+        queryset = Endereco.objects.filter(cliente = request.user)
+        serializer = EnderecosSerializer(queryset, many=True)
+        return response.Response(serializer.data)
+
+class CartaoViewSet(viewsets.ModelViewSet):
+    """ Exibindo todos os Cartoes"""
+    queryset = Cartao.objects.all()
+    serializer_class = CartaoSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        obj = get_object_or_404(self.get_queryset(), pk=pk)
+
+        self.check_object_permissions(self.request, obj)
+        return obj
+    
+    def get_permissions(self):
+        if self.request.method in ['PATCH','DELETE']:
+            return [IsOwner(), ]
+        return super().get_permissions()
+    
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(cliente = request.user)
+        headers = self.get_success_headers(serializer.data)
+        return response.Response(
+            serializer.data
+            , status=status.HTTP_201_CREATED
+            , headers=headers
+            )
+
+    def list(self, request, *args, **kwargs):
+        queryset = Cartao.objects.filter(cliente = request.user)
+        serializer = CartaoSerializer(queryset, many=True)
+        return response.Response(serializer.data)
 
 class ListaEnderecoClienteViewSet(generics.ListAPIView):
     """ Exibindo todos os Enderecos de um cliente"""
@@ -248,4 +293,21 @@ class ItemCarrinhoViewSet(viewsets.ModelViewSet):
             ItemCarrinhoSerializer.data 
             , status=status.HTTP_200_OK
             )
-    
+
+class CarrinhoViewSet(viewsets.ModelViewSet):
+    """ Exibindo todos os Carrinhos"""
+    queryset = Carrinho.objects.all()
+    serializer_class = CarrinhoSerializer
+    permission_classes = [AllowAny]
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        obj = get_object_or_404(self.get_queryset(), pk=pk)
+
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    def get_queryset(self):
+        queryset = Carrinho.objects.filter(cliente=self.request.user)
+        return queryset
