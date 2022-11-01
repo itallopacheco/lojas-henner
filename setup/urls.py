@@ -34,7 +34,8 @@ router.register(r'categoria', CategoriaViewSet , basename = 'categoria')
 router.register(r'unidade-federativa', UnidadeFederativaViewSet , basename = 'unidade_federativa')
 router.register(r'municipio', MunicipioViewSet , basename = 'municipio')
 router.register(r'cartao', CartaoViewSet , basename = 'cartao')
-
+router.register(r'pedido', PedidoViewSet , basename = 'pedido')
+router.register(r'carrinho', CarrinhoViewSet , basename = 'carrinho')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

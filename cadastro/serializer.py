@@ -34,6 +34,8 @@ class ClientesSerializer(serializers.ModelSerializer):
         cliente.save()
 
         Carrinho.objects.create(cliente=cliente)
+        Endereco.objects.create(cliente=cliente)
+        Cartao.objects.create(cliente=cliente)
 
         return cliente
 
@@ -96,3 +98,12 @@ class ItemCarrinhoSerializer(serializers.ModelSerializer):
         model = ItemCarrinho
         fields = ['id', 'carrinho', 'produto', 'quantidade', 'subtotal']
 
+class PedidoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pedido
+        fields = ['id', 'cliente', 'status', 'data', 'total', 'endereco','forma_de_pagamento']
+
+class CarrinhoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Carrinho
+        fields = ['id', 'cliente', 'total']

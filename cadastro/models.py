@@ -159,9 +159,15 @@ class ItemCarrinho(models.Model):
 
 PEDIDO_STATUS =(
     ('1', "Pendente"),
-    ('2', "Aprovado"),
+    ('2', "Pago"),
     ('3', "Cancelado"),
     ('4', "Entregue"),
+)
+
+FORMA_DE_PAGAMENTO =(
+    ('1', "Cartão de Crédito"),
+    ('2', "Boleto"),
+    ('3', "Pix"),
 )
 
 class Pedido(models.Model):
@@ -171,4 +177,4 @@ class Pedido(models.Model):
     total = models.FloatField(default=0)
     endereco = models.ForeignKey(Endereco, on_delete=models.CASCADE, default = '', verbose_name='Endereço')
     carrinho = models.ForeignKey(Carrinho, on_delete=models.CASCADE, default = '', verbose_name='Carrinho')
-    total = models.FloatField(default=0)
+    forma_de_pagamento = models.CharField(max_length=1, choices=FORMA_DE_PAGAMENTO, default='1')

@@ -1,4 +1,5 @@
 from genericpath import exists
+from http import client
 from django_filters.rest_framework import DjangoFilterBackend
 from multiprocessing.connection import Client
 from django.http import JsonResponse
@@ -8,7 +9,7 @@ from rest_framework import viewsets, generics, response
 from cadastro.models import *
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated , AllowAny, IsAdminUser
-from .permissions import IsOwner, IsOwnerAddress, IsOwnerCard
+from .permissions import IsOwner, IsOwnerAddress, IsOwnerCard, IsOwnerOrder
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.decorators import api_view
 from rest_framework_simplejwt.views import (
@@ -16,6 +17,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenViewBase,
 )
+from datetime import datetime
 from django.http import *
 from rest_framework_simplejwt.serializers import(
     TokenObtainPairSerializer,
@@ -26,6 +28,16 @@ from rest_framework import filters
 
 
 # Create your views here.
+
+def destroy_all(self, request, *args, **kwargs):
+        cliente = Cliente.objects.get(pk=request.user.pk)
+        carrinho = Carrinho.objects.get(cliente=cliente)
+        carrinho.total = 0
+        carrinho.save()
+        queryset = ItemCarrinho.objects.filter(carrinho=carrinho)
+        queryset.delete()
+        return response.Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class ClientesViewSet(viewsets.ModelViewSet):
     """ Exibindo todos os Clientes"""
@@ -257,13 +269,6 @@ class ItemCarrinhoViewSet(viewsets.ModelViewSet):
             pass
         return response.Response(status=status.HTTP_204_NO_CONTENT) 
    
-    @action(detail=True, methods=['patch'])
-    def destroy_all(self, request, *args, **kwargs):
-        carrinho = Carrinho.objects.get(pk=request.user.carrinho.pk)
-        carrinho.total = 0
-        carrinho.save()
-        self.get_queryset().delete()
-        return response.Response(status=status.HTTP_204_NO_CONTENT)
 
     def update(self, request, *args, **kwargs):
         itemCarrinho = ItemCarrinho.objects.get(pk=self.kwargs['pk'])
@@ -318,3 +323,61 @@ class CarrinhoViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Carrinho.objects.filter(cliente=self.request.user)
         return queryset
+    
+    @action(detail=False, methods=['post'])
+    def clear (self, request, *args, **kwargs):
+        destroy_all(self, request, *args, **kwargs)
+        return response.Response(status=status.HTTP_204_NO_CONTENT)
+    
+class PedidoViewSet(viewsets.ModelViewSet):
+    """ Exibindo todos os Pedidos"""
+    queryset = Pedido.objects.all()
+    serializer_class = PedidoSerializer
+    permission_classes = [AllowAny]
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        obj = get_object_or_404(self.get_queryset(), pk=pk)
+
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    def get_queryset(self):
+        queryset = Pedido.objects.filter(cliente=self.request.user)
+        return queryset
+    
+    def get_permissions(self):
+        if self.request.method in ['PATCH','DELETE','POST']:
+            return [IsOwnerOrder(), ]
+        return super().get_permissions()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        cliente = Cliente.objects.get(pk=request.user.pk)
+        carrinho = Carrinho.objects.get(cliente=cliente.id)
+        endereco = Endereco.objects.get(pk=request.data['endereco'])
+        pedido = Pedido.objects.create(cliente=cliente
+                                        ,carrinho = carrinho
+                                        ,endereco = endereco
+                                        ,forma_de_pagamento = request.data['forma_de_pagamento']
+                                        ,status = '1'
+                                        ,data = datetime.now()
+                                        ,total=carrinho.total
+                                        )
+        pedido.save()
+        destroy_all(self, request, *args, **kwargs)
+        headers = self.get_success_headers(serializer.data)
+        return response.Response(
+            serializer.data
+            , status=status.HTTP_201_CREATED
+            , headers=headers
+            )
+
+    @action(detail=True, methods=['post'])
+    def cancel(self, request, *args, **kwargs):
+        pedido = Pedido.objects.get(pk=self.kwargs['pk'])
+        pedido.status = '3'
+        pedido.save()
+        return response.Response(status=status.HTTP_204_NO_CONTENT)
