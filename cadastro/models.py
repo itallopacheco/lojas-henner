@@ -76,13 +76,13 @@ class Endereco(models.Model):
     rua = models.CharField(max_length=100)
     numero = models.CharField(max_length=100)
     bairro = models.CharField(max_length=100)
-    cidade = models.ForeignKey(Municipio, on_delete=models.CASCADE, default = '', verbose_name='Cidade')
-    estado = models.ForeignKey(UnidadeFederativa, on_delete=models.CASCADE, default = '', verbose_name='Estado')
+    cidade = models.CharField(max_length=100)
+    estado = models.CharField(max_length=100)
     cep = models.CharField(max_length=100)
     cliente = models.ForeignKey('Cliente', on_delete=models.CASCADE, default = '', verbose_name='Cliente')
 
     def __str__(self):
-        return self.rua + ' ' + str(self.numero) + ' ' + self.bairro + ' ' + str(self.cidade) + ' ' + str(self.estado) + ' ' + self.cep
+        return self.rua + ' ' + str(self.numero) + ' ' + self.bairro + ' ' + (self.cidade) + ' ' + (self.estado) + ' ' + self.cep
 
 class Cliente(AbstractBaseUser):
     primeiro_nome = models.CharField(max_length=100)
