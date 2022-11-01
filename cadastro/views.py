@@ -8,7 +8,7 @@ from rest_framework import viewsets, generics, response
 from cadastro.models import *
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated , AllowAny, IsAdminUser
-from .permissions import IsOwner, IsOwnerAddress
+from .permissions import IsOwner, IsOwnerAddress, IsOwnerCard
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.decorators import api_view
 from rest_framework_simplejwt.views import (
@@ -44,11 +44,18 @@ class ClientesViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.request.method in ['PATCH','DELETE']:
             return [IsOwner(), ]
-        return super().get_permissions()               
+        return super().get_permissions()
+
+    @action(detail=False, methods=['post'])
+    def deactivate(self, request, *args, **kwargs):
+        instance = Cliente.objects.get(pk=request.user.id)
+        instance.is_active = False
+        instance.save()
+        return response.Response(status=status.HTTP_204_NO_CONTENT)   
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     default_error_messages = {
-        'no_active_account': 'Não foi possível encontrar uma conta com essas credenciais',
+        'no_active_account': 'Não foi possível encontrar uma conta ativa com essas credenciais',
     
     }
 
@@ -147,7 +154,7 @@ class CartaoViewSet(viewsets.ModelViewSet):
     
     def get_permissions(self):
         if self.request.method in ['PATCH','DELETE']:
-            return [IsOwner(), ]
+            return [IsOwnerCard(), ]
         return super().get_permissions()
     
     def create(self, request, *args, **kwargs):
